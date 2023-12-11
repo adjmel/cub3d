@@ -1,8 +1,9 @@
-NAME		= cub3d
+NAME		= cub3D
 
 SRC 		= main.c parsing1.c put_text_struct.c \
 			parsing2.c parsing_map_elements.c \
-			check_config_elements.c cub3d_game1.c
+			check_config_elements.c cub3d_game1.c \
+			thom.c ft_player_pos.c moves.c
 
 
 CC 			= cc 
@@ -15,7 +16,7 @@ RM			= rm -rf
 
 $(OBJ_DIR)/%.o: %.c
 	@mkdir -p $(OBJ_DIR)
-	clang -Wall -Wextra -Werror -I/usr/include -Imlx_linux -O3 -c $< -o $@
+	clang -Wall -Werror -Wextra -I/usr/include -Imlx_linux -O3 -c $< -o $@
 
 all	: $(NAME)
 

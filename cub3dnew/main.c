@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: madjogou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: parallels <parallels@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 17:44:10 by madjogou          #+#    #+#             */
-/*   Updated: 2023/10/19 17:45:11 by madjogou         ###   ########.fr       */
+/*   Updated: 2023/12/10 23:22:16 by parallels        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "cub3d.h"
 
 int    good_name_file_cub(int ac, char **av)//✅
@@ -40,14 +41,19 @@ int    good_name_file_cub(int ac, char **av)//✅
 
 int main(int ac, char **av)
 {
+    t_data data;
+    
     /*bon nombre d'argument et bon nom de fichier .cub ✅*/
     if (good_name_file_cub(ac, av) == 1)
             return (1);
 
     /*parsing*/
-    if (parsing(av[1]) == 1)
+    if (parsing(av[1], &data) == 1)
         return (1);
-
+    for (int i = data.parsing.start_map; data.parsing.map[i]; i++)
+        printf("map[%d] = %s\n", i, data.parsing.map[i]);
     /*execution*/
+    ft_raycasting(&data);
     //fonction exec si parsing ok
+    return (0);
 }

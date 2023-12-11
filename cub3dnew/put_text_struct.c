@@ -46,6 +46,7 @@ int check_map_section(t_parsing *parsing, int num_lines)
         if (sign_count == 7)
         {
         int nb_ligne_vide = count_empty_lines_after(parsing->map, i, num_lines);
+        
         parsing->start_map = nb_ligne_vide + i + 1;
              //printf("depart de la map = %s\n", parsing->map[parsing->start_map]);
            // printf("\n- map config l15 --------> = %s\n", parsing->map[15]);
@@ -62,6 +63,7 @@ int check_map_section(t_parsing *parsing, int num_lines)
 int open_file(const char *filename, int *fd) 
 {
     *fd = open(filename, O_RDONLY);
+    printf("fd = %d\n", *fd);
     if (*fd < 0) 
     {
         printf("Error: Failed to open the file\n");
@@ -89,6 +91,7 @@ void resize_and_copy(char ***array, int current_size, int new_size)
     char **new_array = (char **)malloc(new_size * sizeof(char *));
     if (!new_array)
         free(new_array);
+
     memcpy(new_array, *array, current_size * sizeof(char *));
     free(*array);
     *array = new_array;
@@ -149,15 +152,17 @@ int check_too_much_elmts(char *str)
 }
 
 
-int put_text_struct(t_parsing *parsing) 
+int put_text_struct(char *file_cub3d_name, t_parsing *parsing) 
 {
     int config_size = 10;
     int map_size = 10;
 
     int fd;
-    if (open_file("file.cub", &fd) == 1) 
+    if (open_file(file_cub3d_name, &fd) == 1) 
             return 1;
     
+    printf("ici = %s\n,", file_cub3d_name);
+
     init_read_variables(parsing);
     parsing->map = (char **)malloc(config_size * sizeof(char *));
     parsing->config_elements = (char **)malloc(map_size * sizeof(char *));
@@ -195,4 +200,3 @@ int put_text_struct(t_parsing *parsing)
     //close(fd);
     return 0;
 }
-

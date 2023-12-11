@@ -13,6 +13,7 @@ void	init_struct(t_parsing	*parsing)
     parsing->sky_value_3 = -1;  // Valeur par défaut
 
     //init textures
+    
     parsing->no_texture_value = NULL;
     parsing->we_texture_value = NULL;
     parsing->so_texture_value = NULL;
@@ -34,24 +35,18 @@ void ft_init(t_parsing *parsing)
     (void)parsing;
 }
 
-int parsing(char *file_cub3d_name)
+int parsing(char *file_cub3d_name, t_data *data)
 {
     t_parsing *parsing;
 
     // g_allocs = malloc(sizeof(t_allocs *));
-	// *g_allocs = NULL;
+	// *g_allocs = NaULL;
 
-    int fd = open(file_cub3d_name, O_RDONLY);
-    t_data	data; //sert a rien en vrai
-
-    init_struct(&data.parsing);
+    init_struct(&data->parsing);
 
     //parsing pointe vers la même structure que data.parsing
-    parsing = &data.parsing;
-    if (fd != -1)
-        {
-        // Le fichier existe.
-        if (put_text_struct(&data.parsing) == 1)
+    parsing = &data->parsing;
+        if (put_text_struct(file_cub3d_name, &data->parsing) == 1)
         {
             printf("Error : text cannot be put into structure\n");
             return 1;
@@ -74,28 +69,21 @@ int parsing(char *file_cub3d_name)
         }
         // printf("ici = %s\n", parsing->text_file[9]);
       
-        if (parsing_cub3d(parsing->config_elements, &data.parsing) == 1)
+        if (parsing_cub3d(parsing->config_elements, &data->parsing) == 1)
         {
             //faire mes frees si parsing errone
             return 1;
         }
-        
-        close(fd); // Ferme le descripteur de fichier si terminé (a revoir si ok)
-    } 
-    else 
-    {
-        printf("Error : the file does not exist\n");
-        return (1);
-    }
-parsing->mlx = mlx_init();
-parsing->mlx_win = mlx_new_window(parsing->mlx, WINDOW_WIDTH, WINDOW_HEIGHT, "cub3d");
-ft_init(parsing); //equivalent de ft_init(game);
+         // Ferme le descripteur de fichier si terminé (a revoir si ok)
+// parsing->mlx = mlx_init();
+// parsing->mlx_win = mlx_new_window(parsing->mlx, WINDOW_WIDTH, WINDOW_HEIGHT, "cub3d");
+// ft_init(parsing); //equivalent de ft_init(game);
 
-//les fonctions ci-dessous ne sont pas encore implementees : 
-// mlx_hook(parsing->mlx_win, 2, 1L << 0, key_hook1, parsing);
-// mlx_hook(parsing->mlx_win, 3, 1L << 1, key_hook2, parsing);
-// mlx_hook(parsing->mlx_win, 17, 0L, red_cross, parsing);
-// mlx_loop_hook(parsing->mlx, ft_hook, parsing);
-mlx_loop(parsing->mlx);
+// //les fonctions ci-dessous ne sont pas encore implementees : 
+// // mlx_hook(parsing->mlx_win, 2, 1L << 0, key_hook1, parsing);
+// // mlx_hook(parsing->mlx_win, 3, 1L << 1, key_hook2, parsing);
+// // mlx_hook(parsing->mlx_win, 17, 0L, red_cross, parsing);
+// // mlx_loop_hook(parsing->mlx, ft_hook, parsing);
+// mlx_loop(parsing->mlx);
 return (0);
 }

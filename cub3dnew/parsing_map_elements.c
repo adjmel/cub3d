@@ -28,10 +28,11 @@ int correct_number(t_parsing *parsing)
             }
             // Vérifiez les espaces -> dernier lignes 
             // + changer car space possible au debut
-            if (current_char == ' ' && current_char + 1 == '\n')
+            if (current_char == ' ') //&& current_char + 1 == '\n')
             {
-                printf("Error: Do not put spaces in the map\n");
-                return 1;
+                line[i] = '1';//current_char = 1;
+                //  printf("Error: Do not put spaces in the map\n");
+                // return 1;
             }
 
             if (strchr(player_chars, current_char) == NULL)
@@ -206,7 +207,7 @@ int check_nbr_player(t_parsing *parsing)
     while (parsing->map[start] != NULL) 
     {
         char *line = parsing->map[start];
-        char *player_chars = "N";
+        char *player_chars = "NSEW";
 
         size_t i = 0; // Utilisez size_t pour éviter l'erreur de signe
         while (i < strlen(player_chars)) 

@@ -4,6 +4,7 @@
 
 # include <stdlib.h>
 # include <unistd.h>
+# include <stdint.h>
 # include <stdio.h>
 # include "mlx_linux/mlx_int.h"
 # include "mlx_linux/mlx.h"
@@ -13,8 +14,9 @@
 # include <ctype.h>
 # include <math.h>
 
-# define WINDOW_WIDTH 800
-# define WINDOW_HEIGHT 600
+# define WINDOW_HEIGHT 1280
+# define M_PI 3.14159265358979323846
+# define WINDOW_WIDTH 1280
 
 # define MAX_LINE_LENGTH 204//1024 // longueur maximale d'une ligne (a ajuster mais les lignes sont courtes donc ca va)
 # define MAX_MAP_SIZE_X 24 // Ajustez selon besoin
@@ -36,9 +38,12 @@ typedef struct s_parsing
 	int floor_value_1;
 	int floor_value_2;
 	int floor_value_3;
+	int floor_color;
+
 	int sky_value_1;
 	int sky_value_2;
 	int sky_value_3;
+	int ceiling_color;
 
 	/*valeurs pour la resolution*/
 	int r_value_x;
@@ -62,7 +67,6 @@ typedef struct s_parsing
 
 	/*position x et y du player*/
 
-
 	/*distances horizontale et verticale*/
 	//float;
 
@@ -70,29 +74,84 @@ typedef struct s_parsing
 	//float;
 
 	/*mlx*/
-	void *mlx;
-	void *mlx_win;
 
 }			t_parsing;
 
+typedef struct	s_image
+{
+	void *img;
+	char *addr;
+	int bpp;
+	int endian;
+	int line_l;
+	int			width;
+	int			height;
+}				t_image;
+
+typedef struct	s_sprite
+{
+	int			x;
+	int			y;
+	float		dst;
+}				t_sprite;
+
+typedef struct	s_ray
+{
+	float dir_x;
+	float dir_y;
+	int step_x;
+	int step_y;
+	float vert_x;
+	float vert_y;
+	float horz_x;
+	float horz_y;
+	float vert_dist;
+	float horz_dist;
+	float vert_w;
+	float horz_w;
+}	t_ray;
 
 typedef struct s_data
 {
 	t_parsing   parsing;
+	t_image img;
+	t_image *texture;
+	t_sprite *sprite;
 
-	/*exec*/
 	void *win;
 	void *mlx;
-	void		*mlx_win;
-	void		*img;
-	//char **text_file;
 
-	/*position x et y du player*/
-	int player_x;
-	int player_y;
-	int player_direction;
+	int i;
+	float player_x;
+	float player_y;
+	char pletter;
+	float player_direction;
 	int player_dx;
 	int player_dy;
+	float ray_angle;
+	float txt_width;
+
+	int move[6];
+	float *zbuffer;
+	float dst_ppp;
+	float cst;
+	float phi;
+	int *keys;
+	int *en;
+	float alphacam;
+	float xcam;
+	float ycam;
+	int nbr_sprites;
+
+	int rows;
+	int cols;
+	float cos_beta;
+	int a[2];
+	float tan_theta;
+	int facing_up;
+	int facing_left;
+	int vhit;
+	float theta;
 
 }			t_data;
 
@@ -117,7 +176,7 @@ int check_nbr_player();
 int correct_number();
 
 void    init_textures(t_parsing *parsing);
-int parsing(char *file_cub3d_name);
+int parsing(char *file_cub3d_name, t_data *data);
 int parsing_rgbs();
 int parsing_resolution();
 int parsing_textures();
@@ -128,7 +187,16 @@ int put_map_in_struct(t_parsing *parsing);
 int check_nbr_directions(t_parsing *parsing); 
 
 /*EXECUTION*/
-int cub3d_game(t_parsing *parsing);
+void ft_raycasting(t_data *s);
+void ft_find_player(t_data *s);
+int		ft_key_press(int key, t_data *cub3d);
+int		ft_key_release(int key, t_data *cub3d);
+
+
+int ft_move_forward(t_data *s, int speed);
+int ft_move_left(t_data *s, int speed);
+int ft_rotateminus(t_data *s);
+int ft_rotate(t_data *s);
 
 /*GNL*/
 # ifndef BUFFER_SIZE
